@@ -18,13 +18,11 @@ namespace SqlSchema.Library.Models
 
         public abstract DbObjectType Type { get; }
 
-        public IEnumerable<Column> Columns { get; set; }
-
         /// <summary>
-        /// Object may be used in FROM clause
+        /// Object may be used in FROM clause and has columns
         /// </summary>
         public abstract bool IsSelectable { get; }
 
-        
+        public IEnumerable<Column> Columns { get; set; }
     }
 }
