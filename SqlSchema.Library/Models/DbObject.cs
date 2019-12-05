@@ -15,6 +15,7 @@ namespace SqlSchema.Library.Models
     {
         public string Schema { get; set; }
         public string Name { get; set; }
+        public int Id { get; set; }
 
         public abstract DbObjectType Type { get; }
 
@@ -23,6 +24,6 @@ namespace SqlSchema.Library.Models
         /// </summary>
         public abstract bool IsSelectable { get; }
 
-        public IEnumerable<Column> Columns { get; set; }
+        public Column[] Columns { get; set; }
     }
 }
