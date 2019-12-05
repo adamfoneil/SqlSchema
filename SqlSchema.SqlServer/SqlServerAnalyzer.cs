@@ -111,6 +111,8 @@ namespace SqlSchema.SqlServer
             foreach (var tbl in tables) tbl.Columns = columnLookup[tbl.Id].ToArray();
 
             results.AddRange(tables);
+
+            // todo: get unique columns and FKs
         }
     }
 }
