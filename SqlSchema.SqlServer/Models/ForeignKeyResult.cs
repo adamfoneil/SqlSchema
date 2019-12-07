@@ -1,6 +1,6 @@
 ﻿namespace SqlSchema.SqlServer.Models
 {
-    public class ForeignKeysResult
+    internal class ForeignKeysResult
     {
         public int ObjectId { get; set; }
         public string ConstraintName { get; set; }
@@ -12,7 +12,7 @@
         public bool CascadeUpdate { get; set; }
     }
 
-    public class ForeignKeyColumnsResult
+    internal class ForeignKeyColumnsResult
     {
         public int ObjectId { get; set; }
         public string ReferencingName { get; set; }
