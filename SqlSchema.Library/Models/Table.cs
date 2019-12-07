@@ -1,4 +1,7 @@
-﻿namespace SqlSchema.Library.Models
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace SqlSchema.Library.Models
 {
     public class Table : DbObject
     {
@@ -9,5 +12,12 @@
         public override bool IsSelectable => true;
 
         public override DbObjectType Type => DbObjectType.Table;
+
+        public IEnumerable<ForeignKey> GetForeignKeys(IEnumerable<DbObject> allObjects)
+        {
+            return allObjects
+                .Where(obj => obj.Type == DbObjectType.ForeignKey && (obj as ForeignKey).ReferencingTable.Equals(this))
+                .Select(obj => obj as ForeignKey);
+        }
     }
 }
