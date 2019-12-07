@@ -16,8 +16,16 @@ namespace Testing
                 var a = new SqlServerAnalyzer();
                 var objects = a.GetDbObjectsAsync(cn).Result;
                 Assert.IsTrue(objects.Any());
+            }          
+        }
+
+        [TestMethod]
+        public void GetForeignKeys()
+        {
+            using (var cn = LocalDb.GetConnection("CycleLog2"))
+            {
+                var a = new SqlServerAnalyzer();
             }
-            
         }
     }
 }

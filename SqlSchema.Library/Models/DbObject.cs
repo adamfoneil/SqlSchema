@@ -5,6 +5,7 @@ namespace SqlSchema.Library.Models
     public enum DbObjectType
     {
         Table,
+        ForeignKey,
         View,
         TableFunction,
         Procedure,
@@ -25,5 +26,16 @@ namespace SqlSchema.Library.Models
         public abstract bool IsSelectable { get; }
 
         public Column[] Columns { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            var table = obj as Table;
+            return (table != null) ? table.GetHashCode().Equals(this.GetHashCode()) : false;
+        }
+
+        public override int GetHashCode()
+        {
+            return ((Schema ?? string.Empty) + (Name ?? string.Empty)).ToLower().GetHashCode();
+        }
     }
 }
