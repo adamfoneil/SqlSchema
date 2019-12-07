@@ -6,4 +6,4 @@ This is currently in a pre-release state with minimal functionality at the momen
 
 Please check out the [unit tests](https://github.com/adamosoftware/SqlSchema/blob/master/Testing/SqlServer.cs) to get a sense of what this does.
 
-I'm planning for this to target multiple database platforms (MySQL, Postgres), but I'm focusing exclusively on SQL Server for now since that's where I spend all my time, really.
+I'm planning for this to target multiple database platforms (MySQL, PostgreSQL), but I'm focusing exclusively on SQL Server for now since that's where I spend all my time, really.
