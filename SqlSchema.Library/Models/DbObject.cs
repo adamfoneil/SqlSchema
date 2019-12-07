@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SqlSchema.Library.Models
+﻿namespace SqlSchema.Library.Models
 {
     public enum DbObjectType
     {

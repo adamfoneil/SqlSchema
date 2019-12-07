@@ -11,8 +11,8 @@
         public int Precision { get; set; }
         public string Expression { get; set; }
         public int Scale { get; set; }
-        public bool InPrimaryKey { get; set; }        
+        public bool InPrimaryKey { get; set; }
         public int Position { get; set; }
-        public int ObjectId { get; set; }       
+        public int ObjectId { get; set; }
     }
 }

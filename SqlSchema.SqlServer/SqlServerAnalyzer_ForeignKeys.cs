@@ -1,11 +1,9 @@
 ﻿using Dapper;
 using SqlSchema.Library.Models;
 using SqlSchema.SqlServer.Models;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SqlSchema.SqlServer
