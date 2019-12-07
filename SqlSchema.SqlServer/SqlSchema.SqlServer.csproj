@@ -2,14 +2,44 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Adam O'Neil</Authors>
+    <Company>Adam O'Neil</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>Copyright (c) 2019 Adam O'Neil</Copyright>
+    <PackageProjectUrl>https://github.com/adamosoftware/SqlSchema</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/adamosoftware/SqlSchema</RepositoryUrl>
+    <Description>Inspects relational database schemas to enable UIs that interact with database objects</Description>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\SqlSchema.Library\Analyzer.cs" Link="Library\Abstract\Analyzer.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\Argument.cs" Link="Library\Models\Argument.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\Column.cs" Link="Library\Models\Column.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\DbObject.cs" Link="Library\Models\DbObject.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\ForeignKey.cs" Link="Library\Models\ForeignKey.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\ForeignKeyColumn.cs" Link="Library\Models\ForeignKeyColumn.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\Procedure.cs" Link="Library\Models\Procedure.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\ScalarFunction.cs" Link="Library\Models\ScalarFunction.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\Table.cs" Link="Library\Models\Table.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\TableFunction.cs" Link="Library\Models\TableFunction.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\View.cs" Link="Library\Models\View.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.30" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SqlSchema.Library\SqlSchema.Library.csproj" />
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Library\Models\" />
+    <Folder Include="Library\Abstract\" />
   </ItemGroup>
 
 </Project>
