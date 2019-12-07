@@ -13,10 +13,19 @@ namespace SqlSchema.Library.Models
 
         public override DbObjectType Type => DbObjectType.Table;
 
-        public IEnumerable<ForeignKey> GetForeignKeys(IEnumerable<DbObject> allObjects)
+        public IEnumerable<ForeignKey> GetParentForeignKeys(IEnumerable<DbObject> allObjects)
         {
             return allObjects
-                .Where(obj => obj.Type == DbObjectType.ForeignKey && (obj as ForeignKey).ReferencingTable.Equals(this))
+                .OfType<ForeignKey>()
+                .Where(fk => fk.ReferencingTable.Equals(this))
+                .Select(obj => obj as ForeignKey);
+        }
+
+        public IEnumerable<ForeignKey> GetChildForeignKeys(IEnumerable<DbObject> allObjects)
+        {
+            return allObjects
+                .OfType<ForeignKey>()
+                .Where(fk => fk.ReferencedTable.Equals(this))
                 .Select(obj => obj as ForeignKey);
         }
     }
