@@ -2,6 +2,23 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>SqlSchema.Library</PackageId>
+    <Description>Abstract and model classes for SqlSchema database metadata inspector</Description>
+    <Authors>Adam O'Neil</Authors>
+    <Product>SqlSchema.Library</Product>
+    <Copyright>Copyright (c) Adam O'Neil 2020</Copyright>
+    <PackageProjectUrl>https://github.com/adamosoftware/SqlSchema</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/adamosoftware/SqlSchema</RepositoryUrl>
+    <PackageTags />
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
