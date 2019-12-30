@@ -35,5 +35,10 @@
         {
             return ((Schema ?? string.Empty) + (Name ?? string.Empty)).ToLower().GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return (!string.IsNullOrEmpty(Schema)) ? $"{Schema}.{Name}" : Name;
+        }
     }
 }
