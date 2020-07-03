@@ -6,16 +6,29 @@
     <Company>Adam O'Neil</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>Copyright (c) 2020 Adam O'Neil</Copyright>
-    <PackageProjectUrl>https://github.com/adamosoftware/SqlSchema</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/adamosoftware/SqlSchema</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/adamfoneil/SqlSchema</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/adamfoneil/SqlSchema</RepositoryUrl>
     <Description>Inspects relational database schemas to enable UIs that interact with database objects</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\SqlSchema.Library\Analyzer.cs" Link="Abstract\Analyzer.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\Argument.cs" Link="Models\Argument.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\Column.cs" Link="Models\Column.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\DbObject.cs" Link="Models\DbObject.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\ForeignKey.cs" Link="Models\ForeignKey.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\ForeignKeyColumn.cs" Link="Models\ForeignKeyColumn.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\Procedure.cs" Link="Models\Procedure.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\ScalarFunction.cs" Link="Models\ScalarFunction.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\Table.cs" Link="Models\Table.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\TableFunction.cs" Link="Models\TableFunction.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\View.cs" Link="Models\View.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.30" />
-    <PackageReference Include="SqlSchema.Library" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +36,10 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Abstract\" />
   </ItemGroup>
 
 </Project>
