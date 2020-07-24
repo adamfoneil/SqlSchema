@@ -49,5 +49,28 @@ namespace Testing
                 Assert.IsTrue(childFks.First().ReferencedTable.Equals(new Table() { Schema = "dbo", Name = "Ride" }));
             }
         }
+
+        [TestMethod]
+        public void GetViews()
+        {
+            using (var cn = LocalDb.GetConnection("Ginseng8"))
+            {
+                var a = new SqlServerAnalyzer();
+                var views = a.GetDbObjectsAsync(cn).Result.OfType<View>();
+                Assert.IsTrue(views.Any());
+            }
+        }
+
+        [TestMethod]
+        public void GetTableFunctions()
+        {
+            using (var cn = LocalDb.GetConnection("Ginseng8"))
+            {
+                var a = new SqlServerAnalyzer();
+                var functions = a.GetDbObjectsAsync(cn).Result.OfType<TableFunction>();
+                Assert.IsTrue(functions.Any());
+            }
+        }
+
     }
 }

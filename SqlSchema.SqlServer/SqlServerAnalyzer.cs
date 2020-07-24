@@ -1,4 +1,5 @@
-﻿using SqlSchema.Library;
+﻿using Dapper;
+using SqlSchema.Library;
 using SqlSchema.Library.Models;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,8 @@ namespace SqlSchema.SqlServer
 
             await AddTablesAsync(connection, results);
             await AddForeignKeysAsync(connection, results);
-            //await AddViewsAsync(connection, results);
-            //await AddTableFunctions(connection, results);
+            await AddViewsAsync(connection, results);
+            await AddTableFunctions(connection, results);
             //await AddScalarFunctions(connection, results);
             //await AddProcedures(connection, results);
 
@@ -32,17 +33,5 @@ namespace SqlSchema.SqlServer
         {
             throw new NotImplementedException();
         }
-
-        private Task AddTableFunctions(IDbConnection connection, List<DbObject> results)
-        {
-            throw new NotImplementedException();
-        }
-
-        private Task AddViewsAsync(IDbConnection connection, List<DbObject> results)
-        {
-            throw new NotImplementedException();
-        }
-
-
     }
 }

@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <Compile Include="..\SqlSchema.Library\Analyzer.cs" Link="Abstract\Analyzer.cs" />
+    <Compile Include="..\SqlSchema.Library\Interfaces\IDataType.cs" Link="Interfaces\IDataType.cs" />
     <Compile Include="..\SqlSchema.Library\Models\Argument.cs" Link="Models\Argument.cs" />
     <Compile Include="..\SqlSchema.Library\Models\Column.cs" Link="Models\Column.cs" />
     <Compile Include="..\SqlSchema.Library\Models\DbObject.cs" Link="Models\DbObject.cs" />
@@ -40,6 +41,7 @@
 
   <ItemGroup>
     <Folder Include="Abstract\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 
 </Project>

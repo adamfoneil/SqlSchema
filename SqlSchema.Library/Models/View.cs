@@ -2,7 +2,7 @@
 {
     public class View : DbObject
     {
-        public string Sql { get; set; }
+        public string Definition { get; set; }
 
         public override bool IsSelectable => true;
 
