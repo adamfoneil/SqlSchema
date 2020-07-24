@@ -10,7 +10,8 @@
     <RepositoryUrl>https://github.com/adamfoneil/SqlSchema</RepositoryUrl>
     <Description>Inspects relational database schemas to enable UIs that interact with database objects</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
+    <PackageReleaseNotes>added support for Views and Table Functions</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
