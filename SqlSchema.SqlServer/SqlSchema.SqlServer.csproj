@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Adam O'Neil</Authors>
     <Company>Adam O'Neil</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -10,7 +10,7 @@
     <RepositoryUrl>https://github.com/adamfoneil/SqlSchema</RepositoryUrl>
     <Description>Inspects relational database schemas to enable UIs that interact with database objects</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <PackageReleaseNotes>added Table.Indexes</PackageReleaseNotes>
   </PropertyGroup>
 

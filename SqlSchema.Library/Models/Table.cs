@@ -15,10 +15,18 @@ namespace SqlSchema.Library.Models
 
         public Index[] Indexes { get; set; }
 
-        public HashSet<string> UniqueConstraintColumns => Indexes
-            .Where(ndx => ndx.Type == IndexType.UniqueConstraint)
-            .SelectMany(ndx => ndx.Columns)
-            .Select(col => col.Name).ToHashSet();
+        public HashSet<string> UniqueConstraintColumns
+        {
+            get
+            {
+                var results = Indexes
+                    .Where(ndx => ndx.Type == IndexType.UniqueConstraint)
+                    .SelectMany(ndx => ndx.Columns)
+                    .Select(col => col.Name);
+
+                return new HashSet<string>(results);
+            }
+        }
 
         public IEnumerable<ForeignKey> GetParentForeignKeys(IEnumerable<DbObject> allObjects)
         {
