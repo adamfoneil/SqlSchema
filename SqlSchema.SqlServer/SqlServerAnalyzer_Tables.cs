@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using SqlSchema.Library.Models;
+using SqlSchema.SqlServer.Internal;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -71,9 +72,63 @@ namespace SqlSchema.SqlServer
                 WHERE
 	                [t].[type_desc]='USER_TABLE'");
 
-            var columnLookup = columns.ToLookup(row => row.ObjectId);
+			var indexes = await connection.QueryAsync<Index>(
+			   @"SELECT
+					[x].[object_id] AS [ObjectId],
+					[x].[name] AS [Name],
+					CONVERT(bit, CASE
+						WHEN [x].[type_desc]='CLUSTERED' THEN 1
+						ELSE 0
+					END) AS [IsClustered],
+					CASE
+						WHEN [x].[is_primary_key]=1 THEN 1
+						WHEN [x].[is_unique]=1 AND [x].[is_unique_constraint]=0 THEN 2
+						WHEN [x].[is_unique_constraint]=1 THEN 3
+						WHEN [x].[is_unique]=0 THEN 4
+					END AS [Type],
+					[x].[index_id] AS [InternalId]
+				FROM
+					[sys].[indexes] [x]
+					INNER JOIN [sys].[tables] [t] ON [x].[object_id]=[t].[object_id]
+				WHERE
+					[t].[type_desc]='USER_TABLE' AND
+					[x].[type]<>0");
 
-            foreach (var tbl in tables) tbl.Columns = columnLookup[tbl.Id].ToArray();
+			var indexCols = await connection.QueryAsync<IndexColumnResult>(
+				@"SELECT
+					[xcol].[object_id],
+					[xcol].[index_id],
+					[col].[name],
+					[xcol].[key_ordinal],
+					[xcol].[is_descending_key]
+				FROM
+					[sys].[index_columns] [xcol]
+					INNER JOIN [sys].[indexes] [x] ON [xcol].[object_id]=[x].[object_id] AND [xcol].[index_id]=[x].[index_id]
+					INNER JOIN [sys].[columns] [col] ON [xcol].[object_id]=[col].[object_id] AND [xcol].[column_id]=[col].[column_id]
+					INNER JOIN [sys].[tables] [t] ON [x].[object_id]=[t].[object_id]
+				WHERE
+					[t].[type_desc]='USER_TABLE'");
+
+			var columnLookup = columns.ToLookup(row => row.ObjectId);
+			var indexLookup = indexes.ToLookup(row => row.ObjectId);
+			var indexColLookup = indexCols.ToLookup(row => new IndexKey() { object_id = row.object_id, index_id = row.index_id });
+
+			foreach (var x in indexes)
+			{
+				var indexKey = new IndexKey() { object_id = x.ObjectId, index_id = x.InternalId };
+				x.Columns = indexColLookup[indexKey].Select(row => new Index.Column()
+				{
+					Name = row.name,
+					Order = row.key_ordinal,
+					SortDirection = (row.is_descending_key) ? SortDirection.Descending : SortDirection.Ascending
+				});
+			}
+
+			foreach (var tbl in tables)
+			{
+				tbl.Columns = columnLookup[tbl.Id].ToArray();
+				tbl.Indexes = indexLookup[tbl.Id].ToArray();
+			}
 
             results.AddRange(tables);
         }

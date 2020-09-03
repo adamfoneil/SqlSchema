@@ -13,20 +13,25 @@ namespace SqlSchema.Library.Models
 
         public override DbObjectType Type => DbObjectType.Table;
 
+        public Index[] Indexes { get; set; }
+
+        public HashSet<string> UniqueConstraintColumns => Indexes
+            .Where(ndx => ndx.Type == IndexType.UniqueConstraint)
+            .SelectMany(ndx => ndx.Columns)
+            .Select(col => col.Name).ToHashSet();
+
         public IEnumerable<ForeignKey> GetParentForeignKeys(IEnumerable<DbObject> allObjects)
         {
             return allObjects
                 .OfType<ForeignKey>()
-                .Where(fk => fk.ReferencingTable.Equals(this))
-                .Select(obj => obj as ForeignKey);
+                .Where(fk => fk.ReferencingTable.Equals(this));
         }
 
         public IEnumerable<ForeignKey> GetChildForeignKeys(IEnumerable<DbObject> allObjects)
         {
             return allObjects
                 .OfType<ForeignKey>()
-                .Where(fk => fk.ReferencedTable.Equals(this))
-                .Select(obj => obj as ForeignKey);
+                .Where(fk => fk.ReferencedTable.Equals(this));                
         }
     }
 }

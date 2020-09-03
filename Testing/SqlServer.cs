@@ -47,6 +47,10 @@ namespace Testing
 
                 Assert.IsTrue(childFks.First().ReferencingTable.Equals(new Table() { Schema = "dbo", Name = "RideTag" }));
                 Assert.IsTrue(childFks.First().ReferencedTable.Equals(new Table() { Schema = "dbo", Name = "Ride" }));
+
+                var tableDictionary = objects.OfType<Table>().ToDictionary(item => item.Name);
+
+                Assert.IsTrue(tableDictionary["RideTag"].UniqueConstraintColumns.SequenceEqual(new string[] { "RideID", "TagID" }));
             }
         }
 
