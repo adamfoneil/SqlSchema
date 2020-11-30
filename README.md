@@ -4,7 +4,7 @@ This is a library for inspecting relational database schemas that support `IDbCo
 
 ![img](https://adamosoftware.blob.core.windows.net:443/images/sqlschema.png)
 
-This UI is populated in this [LoadObjects](https://github.com/adamfoneil/Postulate.Zinger/blob/master/Zinger/Controls/SchemaBrowser.cs#L87) method. The database objects themselves are retrieved in this short [block](https://github.com/adamfoneil/Postulate.Zinger/blob/master/Zinger/Controls/SchemaBrowser.cs#L77) which calls [GetDbObjectsAsync](https://github.com/adamfoneil/SqlSchema/blob/master/SqlSchema.SqlServer/SqlServerAnalyzer.cs#L13):
+This UI is populated in this [LoadObjects](https://github.com/adamfoneil/Postulate.Zinger/blob/master/Zinger/Controls/SchemaBrowser.cs#L97) method. The database objects themselves are retrieved in this short [block](https://github.com/adamfoneil/Postulate.Zinger/blob/master/Zinger/Controls/SchemaBrowser.cs#L77) which calls [GetDbObjectsAsync](https://github.com/adamfoneil/SqlSchema/blob/master/SqlSchema.SqlServer/SqlServerAnalyzer.cs#L13):
 
 ```csharp
 private async Task RefreshAsync()
