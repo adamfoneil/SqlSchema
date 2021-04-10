@@ -16,5 +16,6 @@ namespace SqlSchema.Library.Models
         public bool InPrimaryKey { get; set; }
         public int Position { get; set; }
         public int ObjectId { get; set; }
+        public bool IsCalculated => !string.IsNullOrEmpty(Expression);
     }
 }

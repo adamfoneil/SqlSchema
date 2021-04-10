@@ -10,8 +10,8 @@
     <RepositoryUrl>https://github.com/adamfoneil/SqlSchema</RepositoryUrl>
     <Description>Inspects relational database schemas to enable UIs that interact with database objects</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>1.0.4</Version>
-    <PackageReleaseNotes>added Table.Indexes</PackageReleaseNotes>
+    <Version>1.0.5</Version>
+    <PackageReleaseNotes>added Column.IsCalculated</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
