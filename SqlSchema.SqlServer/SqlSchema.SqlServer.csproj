@@ -10,13 +10,14 @@
     <RepositoryUrl>https://github.com/adamfoneil/SqlSchema</RepositoryUrl>
     <Description>Inspects relational database schemas to enable UIs that interact with database objects</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>1.0.5</Version>
-    <PackageReleaseNotes>added Column.IsCalculated</PackageReleaseNotes>
+    <Version>1.0.6</Version>
+    <PackageReleaseNotes>added IDefinition to get View and Table Function definitions</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="..\SqlSchema.Library\Analyzer.cs" Link="Abstract\Analyzer.cs" />
     <Compile Include="..\SqlSchema.Library\Interfaces\IDataType.cs" Link="Interfaces\IDataType.cs" />
+    <Compile Include="..\SqlSchema.Library\Interfaces\IDefinition.cs" Link="Interfaces\IDefinition.cs" />
     <Compile Include="..\SqlSchema.Library\Models\Argument.cs" Link="Models\Argument.cs" />
     <Compile Include="..\SqlSchema.Library\Models\Column.cs" Link="Models\Column.cs" />
     <Compile Include="..\SqlSchema.Library\Models\DbObject.cs" Link="Models\DbObject.cs" />

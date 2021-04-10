@@ -17,7 +17,7 @@ namespace SqlSchema.SqlServer
                     [v].[name] AS [Name],
 	                SCHEMA_NAME([v].[schema_id]) AS [Schema],
 	                [v].[object_id] AS [Id],
-                    [m].[definition] AS [Definition]
+                    [m].[definition] AS [SqlDefinition]
                 FROM 
                     [sys].[views] [v]
                     INNER JOIN [sys].[sql_modules] [m] ON [v].[object_id]=[m].[object_id]");

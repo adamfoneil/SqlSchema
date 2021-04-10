@@ -1,8 +1,10 @@
-﻿namespace SqlSchema.Library.Models
+﻿using SqlSchema.Library.Interfaces;
+
+namespace SqlSchema.Library.Models
 {
-    public class View : DbObject
+    public class View : DbObject, IDefinition
     {
-        public string Definition { get; set; }
+        public string SqlDefinition { get; set; }
 
         public override bool IsSelectable => true;
 
