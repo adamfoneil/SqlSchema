@@ -85,10 +85,10 @@ namespace Testing
                 var allObjects = new SqlServerAnalyzer().GetDbObjectsAsync(cn).Result;
 
                 var rootTable = allObjects.OfType<Table>().ToDictionary(obj => obj.Name)["Field"];
-                rootTable.RecurseChildForeignKeys(allObjects,
+                rootTable.EnumChildForeignKeys(allObjects,
                     ending:
                         (stack) => Debug.WriteLine(string.Join("\r\n",
-                            stack.Select((fk, index) => new string(' ', index * 2) + fk.Name + $": {fk.ReferencingTable} -> {fk.ReferencedTable}, depth = {index}")) + "\r\n"));
+                            stack.Select((fk, index) => new string(' ', index * 2) + $"{fk.ReferencingTable} -> {fk.ReferencedTable}")) + "\r\n"));
             }
         }
 

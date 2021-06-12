@@ -43,7 +43,7 @@ namespace SqlSchema.Library.Models
                 .Where(fk => fk.ReferencedTable.Equals(this));
         }
 
-        public void RecurseChildForeignKeys(IEnumerable<DbObject> allObjects, Action<Stack<ForeignKey>> starting = null, Action<Stack<ForeignKey>> ending = null)
+        public void EnumChildForeignKeys(IEnumerable<DbObject> allObjects, Action<Stack<ForeignKey>> starting = null, Action<Stack<ForeignKey>> ending = null)
         {
             Stack<ForeignKey> lineage = new Stack<ForeignKey>();
 
