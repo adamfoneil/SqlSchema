@@ -11,6 +11,6 @@ namespace SqlSchema.Library.Models
 
         public override bool IsSelectable => true;
 
-        public override DbObjectType Type => DbObjectType.TableFunction;        
+        public override DbObjectType Type => DbObjectType.TableFunction;
     }
 }

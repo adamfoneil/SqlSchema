@@ -72,8 +72,8 @@ namespace SqlSchema.SqlServer
                 WHERE
 	                [t].[type_desc]='USER_TABLE'");
 
-			var indexes = await connection.QueryAsync<Index>(
-			   @"SELECT
+            var indexes = await connection.QueryAsync<Index>(
+               @"SELECT
 					[x].[object_id] AS [ObjectId],
 					[x].[name] AS [Name],
 					CONVERT(bit, CASE
@@ -94,8 +94,8 @@ namespace SqlSchema.SqlServer
 					[t].[type_desc]='USER_TABLE' AND
 					[x].[type]<>0");
 
-			var indexCols = await connection.QueryAsync<IndexColumnResult>(
-				@"SELECT
+            var indexCols = await connection.QueryAsync<IndexColumnResult>(
+                @"SELECT
 					[xcol].[object_id],
 					[xcol].[index_id],
 					[col].[name],
@@ -109,26 +109,26 @@ namespace SqlSchema.SqlServer
 				WHERE
 					[t].[type_desc]='USER_TABLE'");
 
-			var columnLookup = columns.ToLookup(row => row.ObjectId);
-			var indexLookup = indexes.ToLookup(row => row.ObjectId);
-			var indexColLookup = indexCols.ToLookup(row => new IndexKey() { object_id = row.object_id, index_id = row.index_id });
+            var columnLookup = columns.ToLookup(row => row.ObjectId);
+            var indexLookup = indexes.ToLookup(row => row.ObjectId);
+            var indexColLookup = indexCols.ToLookup(row => new IndexKey() { object_id = row.object_id, index_id = row.index_id });
 
-			foreach (var x in indexes)
-			{
-				var indexKey = new IndexKey() { object_id = x.ObjectId, index_id = x.InternalId };
-				x.Columns = indexColLookup[indexKey].Select(row => new Index.Column()
-				{
-					Name = row.name,
-					Order = row.key_ordinal,
-					SortDirection = (row.is_descending_key) ? SortDirection.Descending : SortDirection.Ascending
-				});
-			}
+            foreach (var x in indexes)
+            {
+                var indexKey = new IndexKey() { object_id = x.ObjectId, index_id = x.InternalId };
+                x.Columns = indexColLookup[indexKey].Select(row => new Index.Column()
+                {
+                    Name = row.name,
+                    Order = row.key_ordinal,
+                    SortDirection = (row.is_descending_key) ? SortDirection.Descending : SortDirection.Ascending
+                });
+            }
 
-			foreach (var tbl in tables)
-			{
-				tbl.Columns = columnLookup[tbl.Id].ToArray();
-				tbl.Indexes = indexLookup[tbl.Id].ToArray();
-			}
+            foreach (var tbl in tables)
+            {
+                tbl.Columns = columnLookup[tbl.Id].ToArray();
+                tbl.Indexes = indexLookup[tbl.Id].ToArray();
+            }
 
             results.AddRange(tables);
         }

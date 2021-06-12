@@ -1,10 +1,8 @@
 ﻿using Dapper;
 using SqlSchema.Library.Models;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SqlSchema.SqlServer
@@ -26,7 +24,7 @@ namespace SqlSchema.SqlServer
 	                [o].[type_desc]='SQL_TABLE_VALUED_FUNCTION'");
 
             var args = await connection.QueryAsync<Argument>(
-				@"SELECT 
+                @"SELECT 
 					[p].[object_id] AS [ObjectId],
 					[p].[name] AS [Name],	
 					TYPE_NAME([p].[system_type_id]) AS [DataType],
@@ -42,8 +40,8 @@ namespace SqlSchema.SqlServer
 				FROM 
 					[sys].[all_parameters] [p]");
 
-			var columns = await connection.QueryAsync<Column>(
-				@"SELECT
+            var columns = await connection.QueryAsync<Column>(
+                @"SELECT
 					[col].[object_id] AS [ObjectId],
 					[col].[name] AS [Name],
 					TYPE_NAME([col].[system_type_id]) AS [DataType],
@@ -66,16 +64,16 @@ namespace SqlSchema.SqlServer
 				WHERE
 					[f].[type_desc]='SQL_TABLE_VALUED_FUNCTION'");
 
-			var argLookup = args.ToLookup(row => row.ObjectId);
-			var columnLookup = columns.ToLookup(row => row.ObjectId);
+            var argLookup = args.ToLookup(row => row.ObjectId);
+            var columnLookup = columns.ToLookup(row => row.ObjectId);
 
-			foreach (var f in functions)
-			{
-				f.Arguments = argLookup[f.Id].ToArray();
-				f.Columns = columnLookup[f.Id].ToArray();
-			}
+            foreach (var f in functions)
+            {
+                f.Arguments = argLookup[f.Id].ToArray();
+                f.Columns = columnLookup[f.Id].ToArray();
+            }
 
-			results.AddRange(functions);
+            results.AddRange(functions);
         }
 
     }

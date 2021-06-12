@@ -10,7 +10,7 @@ namespace SqlSchema.Library.Models
         public string Collation { get; set; }
         public bool IsNullable { get; set; }
         public int MaxLength { get; set; }
-        public int Precision { get; set; }        
+        public int Precision { get; set; }
         public int Scale { get; set; }
         public string Expression { get; set; }
         public bool InPrimaryKey { get; set; }

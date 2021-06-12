@@ -1,5 +1,4 @@
-﻿using Dapper;
-using SqlSchema.Library;
+﻿using SqlSchema.Library;
 using SqlSchema.Library.Models;
 using System;
 using System.Collections.Generic;

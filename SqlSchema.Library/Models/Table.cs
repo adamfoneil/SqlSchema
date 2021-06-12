@@ -39,7 +39,7 @@ namespace SqlSchema.Library.Models
         {
             return allObjects
                 .OfType<ForeignKey>()
-                .Where(fk => fk.ReferencedTable.Equals(this));                
+                .Where(fk => fk.ReferencedTable.Equals(this));
         }
     }
 }

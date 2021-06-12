@@ -16,11 +16,11 @@ namespace SqlSchema.Library.Models
         NonUnique = 4
     }
 
-    public partial class Index 
-    {        
+    public partial class Index
+    {
         public string Name { get; set; }
         public IndexType Type { get; set; }
-        public IEnumerable<Column> Columns { get; set; }        
+        public IEnumerable<Column> Columns { get; set; }
         public bool IsClustered { get; set; }
 
         public bool IsUnique => Type != IndexType.NonUnique;

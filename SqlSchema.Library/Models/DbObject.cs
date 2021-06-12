@@ -7,7 +7,7 @@
         View,
         TableFunction,
         Procedure,
-        ScalarFunction        
+        ScalarFunction
     }
 
     public abstract class DbObject
@@ -23,7 +23,7 @@
         /// </summary>
         public abstract bool IsSelectable { get; }
 
-        public Column[] Columns { get; set; }        
+        public Column[] Columns { get; set; }
 
         public override bool Equals(object obj)
         {
