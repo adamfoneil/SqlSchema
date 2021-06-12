@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SqlSchema.Library.Models
@@ -40,6 +41,28 @@ namespace SqlSchema.Library.Models
             return allObjects
                 .OfType<ForeignKey>()
                 .Where(fk => fk.ReferencedTable.Equals(this));
+        }
+
+        public void RecurseChildForeignKeys(IEnumerable<DbObject> allObjects, Action<Stack<ForeignKey>> starting = null, Action<Stack<ForeignKey>> ending = null)
+        {
+            Stack<ForeignKey> lineage = new Stack<ForeignKey>();
+
+            Execute(this);
+
+            void Execute(Table table)
+            {
+                var childFKs = table.GetChildForeignKeys(allObjects);
+                foreach (var fk in childFKs)
+                {
+                    lineage.Push(fk);
+                    starting?.Invoke(lineage);
+
+                    Execute(fk.ReferencingTable);
+
+                    ending?.Invoke(lineage);
+                    lineage.Pop();
+                }
+            }
         }
     }
 }

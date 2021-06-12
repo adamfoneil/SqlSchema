@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SqlSchema.Library.Models;
 using SqlSchema.SqlServer;
 using SqlServer.LocalDb;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Testing
@@ -73,6 +74,21 @@ namespace Testing
                 var a = new SqlServerAnalyzer();
                 var functions = a.GetDbObjectsAsync(cn).Result.OfType<TableFunction>();
                 Assert.IsTrue(functions.Any());
+            }
+        }
+
+        [TestMethod]
+        public void ExploreFKs()
+        {
+            using (var cn = LocalDb.GetConnection("AerieHub4"))
+            {
+                var allObjects = new SqlServerAnalyzer().GetDbObjectsAsync(cn).Result;
+
+                var rootTable = allObjects.OfType<Table>().ToDictionary(obj => obj.Name)["Field"];
+                rootTable.RecurseChildForeignKeys(allObjects,
+                    ending:
+                        (stack) => Debug.WriteLine(string.Join("\r\n",
+                            stack.Select((fk, index) => new string(' ', index * 2) + fk.Name + $": {fk.ReferencingTable} -> {fk.ReferencedTable}, depth = {index}")) + "\r\n"));
             }
         }
 
