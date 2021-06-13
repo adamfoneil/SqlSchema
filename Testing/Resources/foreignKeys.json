@@ -1,0 +1,26 @@
+{
+  "foreignKeys": [
+    {
+      "name": "FK_DropdownValue_Value",
+      "referencedTable": "DropdownOption",
+      "referencingTable": "DropdownValue",
+      "columns": [
+        {
+          "referencedName": "Id",
+          "referencingName": "Value"
+        }
+      ]
+    },
+    {
+      "name": "FK_DropdownOption_FieldId",
+      "referencedTable": "Field",
+      "referencingTable": "DropdownOption",
+      "columns": [
+        {
+          "referencedName": "Id",
+          "referencingName": "FieldId"
+        }
+      ]
+    }
+  ]
+}

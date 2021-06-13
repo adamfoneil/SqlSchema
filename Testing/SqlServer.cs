@@ -2,8 +2,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SqlSchema.Library.Models;
 using SqlSchema.SqlServer;
 using SqlServer.LocalDb;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text.Json;
 
 namespace Testing
 {
@@ -89,8 +93,77 @@ namespace Testing
                     ending:
                         (stack) => Debug.WriteLine(string.Join("\r\n",
                             stack.Select((fk, index) => new string(' ', index * 2) + $"{fk.ReferencingTable} -> {fk.ReferencedTable}")) + "\r\n"));
+
+                /*
+                this is for FromClaseSql test
+                rootTable.EnumChildForeignKeys(allObjects,
+                    ending: (stack) =>
+                    {
+                        var simplified = new
+                        {
+                            foreignKeys = stack.Select(fk => new
+                            {
+                                name = fk.Name,
+                                referencedTable = fk.ReferencedTable.Name,
+                                referencingTable = fk.ReferencingTable.Name,
+                                columns = fk.Columns.Select(col => new
+                                {
+                                    referencedName = col.ReferencedName,
+                                    referencingName = col.ReferencingName
+                                })
+                            })
+                        };
+
+                        string json = JsonSerializer.Serialize(simplified, new JsonSerializerOptions()
+                        {
+                            WriteIndented = true
+                        });
+                        Debug.Print(json);
+                        Debug.Print("\r\n");
+                    });*/
             }
         }
 
+        [TestMethod]
+        public void FromClauseSql()
+        {
+            var fks = GetResourceFKs();
+
+            string fromClause =
+                @$"FROM [DropdownValue] [dv] 
+                INNER JOIN [DropdownOption] [do] ON [dv].[Value]=[do].[Id]
+                INNER JOIN [Field] [f] ON [do].[FieldId]=[f].[Id]";
+
+            IEnumerable<ForeignKey> GetResourceFKs()
+            {
+                var json = GetResource("foreignKeys.json");
+                using (var doc = JsonDocument.Parse(json))
+                {
+                    var array = doc.RootElement.GetProperty("foreignKeys");
+                    foreach (var element in array.EnumerateArray())
+                    {
+                        yield return new ForeignKey()
+                        {
+                            Name = element.GetProperty("name").ToString(),
+                            ReferencedTable = new Table() { Name = element.GetProperty("referencedTable").ToString() },
+                            ReferencingTable = new Table() { Name = element.GetProperty("referencingTable").ToString() },
+                            Columns = element.GetProperty("columns").EnumerateArray().Select(ele => new ForeignKeyColumn()
+                            {
+                                ReferencedName = ele.GetProperty("referencedName").ToString(),
+                                ReferencingName = ele.GetProperty("referencingName").ToString()
+                            }).ToArray()
+                        };
+                    }
+                }
+            }
+        }
+
+        private string GetResource(string name)
+        {
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"Testing.Resources.{name}"))
+            {
+                return new StreamReader(stream).ReadToEnd();                
+            }
+        }
     }
 }

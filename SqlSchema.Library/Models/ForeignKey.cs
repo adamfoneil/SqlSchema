@@ -1,4 +1,6 @@
-﻿namespace SqlSchema.Library.Models
+﻿using System.Linq;
+
+namespace SqlSchema.Library.Models
 {
     public class ForeignKey : DbObject
     {
@@ -12,5 +14,7 @@
         public bool CascadeUpdate { get; set; }
 
         public new ForeignKeyColumn[] Columns { get; set; }
+
+        public override string ToString() => $"{Name}: {ReferencingTable}[{string.Join(", ", Columns.Select(col => col.ReferencingName))}] -> {ReferencedTable}[{string.Join(", ", Columns.Select(col => col.ReferencedName))}]";
     }
 }
