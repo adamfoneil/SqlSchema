@@ -9,6 +9,7 @@ namespace SqlSchema.Library.Models
         public string IdentityColumn { get; set; }
         public string ClusteredIndex { get; set; }
         public long RowCount { get; set; }
+        public string Alias { get; set; }
 
         public override bool IsSelectable => true;
 

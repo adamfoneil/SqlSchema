@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SqlSchema.Library.Models;
 using SqlSchema.SqlServer;
+using SqlSchema.SqlServer.Static;
 using SqlServer.LocalDb;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using static SqlSchema.SqlServer.Static.SqlBuilder;
 
 namespace Testing
 {
@@ -127,26 +129,36 @@ namespace Testing
         [TestMethod]
         public void FromClauseSql()
         {
-            var fks = GetResourceFKs();
+            var fks = GetResourceFKs();            
 
-            string fromClause =
+            string expectedResult =
                 @$"FROM [DropdownValue] [dv] 
                 INNER JOIN [DropdownOption] [do] ON [dv].[Value]=[do].[Id]
                 INNER JOIN [Field] [f] ON [do].[FieldId]=[f].[Id]";
 
+            var joinSql = SqlBuilder.JoinTables(fks);
+            Assert.IsTrue(joinSql.Equals(expectedResult));
+            
             IEnumerable<ForeignKey> GetResourceFKs()
             {
                 var json = GetResource("foreignKeys.json");
                 using (var doc = JsonDocument.Parse(json))
                 {
-                    var array = doc.RootElement.GetProperty("foreignKeys");
+                    var array = doc.RootElement.GetProperty("tables");
+                    var tables = array.EnumerateArray().Select(element => new Table()
+                    {
+                        Name = element.GetProperty("name").ToString(),
+                        Alias = element.GetProperty("alias").ToString()
+                    }).ToDictionary(item => item.Name);
+                    
+                    array = doc.RootElement.GetProperty("foreignKeys");
                     foreach (var element in array.EnumerateArray())
                     {
                         yield return new ForeignKey()
                         {
                             Name = element.GetProperty("name").ToString(),
-                            ReferencedTable = new Table() { Name = element.GetProperty("referencedTable").ToString() },
-                            ReferencingTable = new Table() { Name = element.GetProperty("referencingTable").ToString() },
+                            ReferencedTable = tables[element.GetProperty("referencedTable").ToString()],
+                            ReferencingTable = tables[element.GetProperty("referencingTable").ToString()],
                             Columns = element.GetProperty("columns").EnumerateArray().Select(ele => new ForeignKeyColumn()
                             {
                                 ReferencedName = ele.GetProperty("referencedName").ToString(),
@@ -156,7 +168,7 @@ namespace Testing
                     }
                 }
             }
-        }
+        }        
 
         private string GetResource(string name)
         {

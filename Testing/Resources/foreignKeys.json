@@ -1,4 +1,18 @@
 {
+  "tables": [
+    {
+      "name": "DropdownOption",
+      "alias": "do"
+    },
+    {
+      "name": "DropdownValue",
+      "alias": "dv"
+    },
+    {
+      "name": "Field",
+      "alias": "f"
+    }
+  ],
   "foreignKeys": [
     {
       "name": "FK_DropdownValue_Value",
