@@ -77,6 +77,5 @@ namespace SqlSchema.SqlServer
 
 			results.AddRange(functions);
         }
-
     }
 }
