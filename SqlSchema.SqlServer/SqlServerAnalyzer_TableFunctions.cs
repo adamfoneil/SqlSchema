@@ -1,17 +1,15 @@
 ﻿using Dapper;
 using SqlSchema.Library.Models;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SqlSchema.SqlServer
 {
     public partial class SqlServerAnalyzer
     {
-        private async Task AddTableFunctions(IDbConnection connection, List<DbObject> results)
+        private async Task AddTableFunctionsAsync(IDbConnection connection, List<DbObject> results)
         {
             var functions = await connection.QueryAsync<TableFunction>(
                 @"SELECT 
@@ -25,22 +23,7 @@ namespace SqlSchema.SqlServer
                 WHERE
 	                [o].[type_desc]='SQL_TABLE_VALUED_FUNCTION'");
 
-            var args = await connection.QueryAsync<Argument>(
-				@"SELECT 
-					[p].[object_id] AS [ObjectId],
-					[p].[name] AS [Name],	
-					TYPE_NAME([p].[system_type_id]) AS [DataType],
-					CASE
-						WHEN TYPE_NAME([p].[system_type_id]) LIKE 'nvar%' AND [p].[max_length]>0 THEN ([p].[max_length]/2)
-						WHEN TYPE_NAME([p].[system_type_id]) LIKE 'nvar%' AND [p].[max_length]=0 THEN -1
-						ELSE [p].[max_length]
-					END AS [MaxLength],
-					[p].[precision] AS [Precision],
-					[p].[scale] AS [Scale],
-					[p].[default_value] AS [DefaultValue],
-					[p].[parameter_id] AS [Position]
-				FROM 
-					[sys].[all_parameters] [p]");
+			var args = await GetArgumentsAsync(connection);
 
 			var columns = await connection.QueryAsync<Column>(
 				@"SELECT
@@ -77,5 +60,23 @@ namespace SqlSchema.SqlServer
 
 			results.AddRange(functions);
         }
+
+		private static async Task<IEnumerable<Argument>> GetArgumentsAsync(IDbConnection connection) =>
+			await connection.QueryAsync<Argument>(
+				@"SELECT 
+					[p].[object_id] AS [ObjectId],
+					[p].[name] AS [Name],	
+					TYPE_NAME([p].[system_type_id]) AS [DataType],
+					CASE
+						WHEN TYPE_NAME([p].[system_type_id]) LIKE 'nvar%' AND [p].[max_length]>0 THEN ([p].[max_length]/2)
+						WHEN TYPE_NAME([p].[system_type_id]) LIKE 'nvar%' AND [p].[max_length]=0 THEN -1
+						ELSE [p].[max_length]
+					END AS [MaxLength],
+					[p].[precision] AS [Precision],
+					[p].[scale] AS [Scale],
+					[p].[default_value] AS [DefaultValue],
+					[p].[parameter_id] AS [Position]
+				FROM 
+					[sys].[all_parameters] [p]");
     }
 }

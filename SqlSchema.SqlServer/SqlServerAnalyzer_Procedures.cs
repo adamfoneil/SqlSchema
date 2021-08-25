@@ -1,9 +1,8 @@
 ﻿using Dapper;
 using SqlSchema.Library.Models;
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SqlSchema.SqlServer
@@ -21,6 +20,17 @@ namespace SqlSchema.SqlServer
                 FROM 
                     [sys].[procedures] [p]
                     INNER JOIN [sys].[sql_modules] [m] ON [p].[object_id]=[m].[object_id]");
+
+            var args = await GetArgumentsAsync(connection);
+
+            var argLookup = args.ToLookup(row => row.ObjectId);
+
+            foreach (var proc in procs)
+            {
+                proc.Arguments = argLookup[proc.Id];
+            }
+
+            results.AddRange(procs);
         }
     }
 }

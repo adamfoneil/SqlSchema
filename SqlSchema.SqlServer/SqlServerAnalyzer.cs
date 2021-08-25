@@ -17,16 +17,11 @@ namespace SqlSchema.SqlServer
             await AddTablesAsync(connection, results);
             await AddForeignKeysAsync(connection, results);
             await AddViewsAsync(connection, results);
-            await AddTableFunctions(connection, results);
+            await AddTableFunctionsAsync(connection, results);
             //await AddScalarFunctions(connection, results);
-            //await AddProcedures(connection, results);
+            await AddProceduresAsync(connection, results);
 
             return results;
-        }
-
-        private Task AddProcedures(IDbConnection connection, List<DbObject> results)
-        {
-            throw new NotImplementedException();
         }
 
         private Task AddScalarFunctions(IDbConnection connection, List<DbObject> results)
