@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -10,8 +10,8 @@
     <RepositoryUrl>https://github.com/adamfoneil/SqlSchema</RepositoryUrl>
     <Description>Inspects relational database schemas to enable UIs that interact with database objects</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>1.0.6</Version>
-    <PackageReleaseNotes>added IDefinition to get View and Table Function definitions</PackageReleaseNotes>
+    <Version>1.0.7</Version>
+    <PackageReleaseNotes>added stored procedures</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

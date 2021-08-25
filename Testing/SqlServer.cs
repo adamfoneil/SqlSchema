@@ -76,5 +76,19 @@ namespace Testing
             }
         }
 
+        [TestMethod]
+        public void GetProcedures()
+        {
+            using (var cn = LocalDb.GetConnection("Ginseng8"))
+            {
+                var a = new SqlServerAnalyzer();
+                var procs = a.GetDbObjectsAsync(cn).Result.OfType<Procedure>();
+                Assert.IsTrue(procs.Any());
+
+                var dictionary = procs.ToDictionary(item => item.Name);
+
+                Assert.IsTrue(dictionary["PostInvoice"].Arguments.Any(arg => arg.Name.Equals("@orgId")));
+            }
+        }
     }
 }
