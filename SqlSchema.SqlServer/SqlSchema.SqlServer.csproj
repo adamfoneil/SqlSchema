@@ -11,7 +11,7 @@
     <Description>Inspects relational database schemas to enable UIs that interact with database objects</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Version>1.0.8</Version>
-    <PackageReleaseNotes>added stored procedures</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/adamfoneil/Postulate.Zinger/issues/66</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
