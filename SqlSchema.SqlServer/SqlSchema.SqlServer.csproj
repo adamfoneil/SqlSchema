@@ -10,7 +10,7 @@
     <RepositoryUrl>https://github.com/adamfoneil/SqlSchema</RepositoryUrl>
     <Description>Inspects relational database schemas to enable UIs that interact with database objects</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>1.0.7</Version>
+    <Version>1.0.8</Version>
     <PackageReleaseNotes>added stored procedures</PackageReleaseNotes>
   </PropertyGroup>
 
