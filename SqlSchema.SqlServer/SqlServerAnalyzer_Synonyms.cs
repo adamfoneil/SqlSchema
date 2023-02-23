@@ -12,25 +12,6 @@ namespace SqlSchema.SqlServer
     {
         private async Task AddSynonymsAsync(IDbConnection connection, List<DbObject> results)
         {
-            #region obsolete
-            // thought I would need this, but don't think I do.
-            // splits the synonym obj references into individual parts
-            var referencedObjects = (await connection.QueryAsync<ObjectNamePart>(
-                @"SELECT
-	                [syn].[object_id] AS [ObjectId],
-	                [p].[value] AS [Name]
-                FROM
-	                [sys].[synonyms] [syn]
-	                CROSS APPLY STRING_SPLIT([syn].[base_object_name], '.') AS [p]"))
-                    .GroupBy(row => row.ObjectId)
-                    .Select(grp => grp.Select((item, index) => new ObjectNamePart()
-                    {
-                        ObjectId = item.ObjectId,
-                        Level = index,
-                        Name = item.Name
-                    })).SelectMany(names => names);
-            #endregion
-
             // all the synonyms in current connection
             var synonyms = await connection.QueryAsync<SynonymResult>(
                 @"SELECT 
@@ -55,8 +36,8 @@ namespace SqlSchema.SqlServer
             {
                 foreach (var r in reflectors)
                 {
-                    var allObjects = await r.ObjectGetter.Invoke($"{db.Key}.", connection);
-                    var output = allObjects.Join(synonyms, obj => obj.Id, syn => syn.TargetObjectId, (obj, syn) => new Synonym()
+                    var referencedObjects = await r.ObjectGetter.Invoke($"{db.Key}.", connection);
+                    var output = referencedObjects.Join(synonyms, obj => obj.Id, syn => syn.TargetObjectId, (obj, syn) => new Synonym()
                     {
                         Name = syn.Name,
                         Schema = syn.Schema,
