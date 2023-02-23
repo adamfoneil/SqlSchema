@@ -98,8 +98,8 @@ namespace Testing
             using (var cn = LocalDb.GetConnection("ZingerSample"))
             {
                 var a = new SqlServerAnalyzer();
-                var synonyms = (await a.GetDbObjectsAsync(cn)).OfType<Synonym>();
-                Assert.IsFalse(synonyms.Count() == 3);
+                var synonyms = (await a.GetDbObjectsAsync(cn)).OfType<Synonym>();                
+                Assert.IsTrue(synonyms.Count() == 3);
             }
         }
     }
