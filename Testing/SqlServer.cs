@@ -3,6 +3,7 @@ using SqlSchema.Library.Models;
 using SqlSchema.SqlServer;
 using SqlServer.LocalDb;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Testing
 {
@@ -88,6 +89,17 @@ namespace Testing
                 var dictionary = procs.ToDictionary(item => item.Name);
 
                 Assert.IsTrue(dictionary["PostInvoice"].Arguments.Any(arg => arg.Name.Equals("@orgId")));
+            }
+        }
+
+        [TestMethod]
+        public async Task GetSynonyms()
+        {
+            using (var cn = LocalDb.GetConnection("ZingerSample"))
+            {
+                var a = new SqlServerAnalyzer();
+                var synonyms = (await a.GetDbObjectsAsync(cn)).OfType<Synonym>();
+                Assert.IsFalse(synonyms.Count() == 3);
             }
         }
     }

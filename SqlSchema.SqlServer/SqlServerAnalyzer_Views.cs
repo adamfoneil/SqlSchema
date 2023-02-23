@@ -12,18 +12,24 @@ namespace SqlSchema.SqlServer
     {
         private async Task AddViewsAsync(IDbConnection connection, List<DbObject> results)
         {
+			var views = await GetViewsInnerAsync(connection);
+			results.AddRange(views);
+		}
+
+		public static async Task<IEnumerable<View>> GetViewsInnerAsync(IDbConnection connection, string sysObjectPrefix = null)
+		{
             var views = await connection.QueryAsync<View>(
-                @"SELECT 
+                $@"SELECT 
                     [v].[name] AS [Name],
 	                SCHEMA_NAME([v].[schema_id]) AS [Schema],
 	                [v].[object_id] AS [Id],
                     [m].[definition] AS [SqlDefinition]
                 FROM 
-                    [sys].[views] [v]
-                    INNER JOIN [sys].[sql_modules] [m] ON [v].[object_id]=[m].[object_id]");
+                    {sysObjectPrefix}[sys].[views] [v]
+                    INNER JOIN {sysObjectPrefix}[sys].[sql_modules] [m] ON [v].[object_id]=[m].[object_id]");
 
-			var columns = await connection.QueryAsync<Column>(
-				@"SELECT
+            var columns = await connection.QueryAsync<Column>(
+                $@"SELECT
 	                [col].[object_id] AS [ObjectId],
 	                [col].[name] AS [Name],
 	                TYPE_NAME([col].[system_type_id]) AS [DataType],
@@ -40,15 +46,17 @@ namespace SqlSchema.SqlServer
 	                [calc].[definition] AS [Expression],
 	                0 AS [InPrimaryKey]
                 FROM
-	                [sys].[columns] [col]	
-					INNER JOIN [sys].[views] [v] ON [col].[object_id]=[v].[object_id]
-	                LEFT JOIN [sys].[computed_columns] [calc] ON [col].[object_id]=[calc].[object_id] AND [col].[column_id]=[calc].[column_id]");
+	                {sysObjectPrefix}[sys].[columns] [col]	
+					INNER JOIN {sysObjectPrefix}[sys].[views] [v] ON [col].[object_id]=[v].[object_id]
+	                LEFT JOIN {sysObjectPrefix}[sys].[computed_columns] [calc] ON 
+						[col].[object_id]=[calc].[object_id] AND 
+						[col].[column_id]=[calc].[column_id]");
 
-			var columnLookup = columns.ToLookup(row => row.ObjectId);
+            var columnLookup = columns.ToLookup(row => row.ObjectId);
 
-			foreach (var v in views) v.Columns = columnLookup[v.Id].ToArray();
+            foreach (var v in views) v.Columns = columnLookup[v.Id].ToArray();
 
-			results.AddRange(views);
-		}
-	}
+			return views;
+        }
+    }
 }

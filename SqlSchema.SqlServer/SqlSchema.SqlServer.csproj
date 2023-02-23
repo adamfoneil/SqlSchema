@@ -26,6 +26,7 @@
     <Compile Include="..\SqlSchema.Library\Models\Index.cs" Link="Models\Index.cs" />
     <Compile Include="..\SqlSchema.Library\Models\Procedure.cs" Link="Models\Procedure.cs" />
     <Compile Include="..\SqlSchema.Library\Models\ScalarFunction.cs" Link="Models\ScalarFunction.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\Synonym.cs" Link="Models\Synonym.cs" />
     <Compile Include="..\SqlSchema.Library\Models\Table.cs" Link="Models\Table.cs" />
     <Compile Include="..\SqlSchema.Library\Models\TableFunction.cs" Link="Models\TableFunction.cs" />
     <Compile Include="..\SqlSchema.Library\Models\View.cs" Link="Models\View.cs" />

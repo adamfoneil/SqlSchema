@@ -20,6 +20,7 @@ namespace SqlSchema.SqlServer
             await AddTableFunctionsAsync(connection, results);
             //await AddScalarFunctions(connection, results);
             await AddProceduresAsync(connection, results);
+            await AddSynonymsAsync(connection, results);
 
             return results;
         }

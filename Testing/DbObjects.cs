@@ -1,8 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SqlSchema.Library.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Testing
 {
