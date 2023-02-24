@@ -12,6 +12,8 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Version>1.0.9</Version>
     <PackageReleaseNotes>https://github.com/adamfoneil/Postulate.Zinger/issues/71</PackageReleaseNotes>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
