@@ -28,7 +28,7 @@ namespace SqlSchema.SqlServer
                     {sysObjectPrefix}[sys].[procedures] [p]
                     INNER JOIN {sysObjectPrefix}[sys].[sql_modules] [m] ON [p].[object_id]=[m].[object_id]");
 
-            var args = await GetArgumentsAsync(connection);
+            var args = await GetArgumentsAsync(connection, sysObjectPrefix);
 
             var argLookup = args.ToLookup(row => row.ObjectId);
 

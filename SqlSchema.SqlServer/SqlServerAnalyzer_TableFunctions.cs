@@ -61,9 +61,9 @@ namespace SqlSchema.SqlServer
 			results.AddRange(functions);
         }
 
-		private static async Task<IEnumerable<Argument>> GetArgumentsAsync(IDbConnection connection) =>
+		private static async Task<IEnumerable<Argument>> GetArgumentsAsync(IDbConnection connection, string sysObjectPrefix = null) =>
 			await connection.QueryAsync<Argument>(
-				@"SELECT 
+				$@"SELECT 
 					[p].[object_id] AS [ObjectId],
 					[p].[name] AS [Name],	
 					TYPE_NAME([p].[system_type_id]) AS [DataType],
@@ -77,6 +77,6 @@ namespace SqlSchema.SqlServer
 					[p].[default_value] AS [DefaultValue],
 					[p].[parameter_id] AS [Position]
 				FROM 
-					[sys].[all_parameters] [p]");
+					{sysObjectPrefix}[sys].[all_parameters] [p]");
     }
 }
