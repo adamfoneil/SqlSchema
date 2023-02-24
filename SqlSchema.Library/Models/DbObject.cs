@@ -7,7 +7,8 @@
         View,
         TableFunction,
         Procedure,
-        ScalarFunction        
+        ScalarFunction,
+        Synonym
     }
 
     public abstract class DbObject

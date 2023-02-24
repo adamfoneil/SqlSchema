@@ -10,8 +10,10 @@
     <RepositoryUrl>https://github.com/adamfoneil/SqlSchema</RepositoryUrl>
     <Description>Inspects relational database schemas to enable UIs that interact with database objects</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>1.0.8</Version>
-    <PackageReleaseNotes>https://github.com/adamfoneil/Postulate.Zinger/issues/66</PackageReleaseNotes>
+    <Version>1.0.10</Version>
+    <PackageReleaseNotes>https://github.com/adamfoneil/Postulate.Zinger/issues/71</PackageReleaseNotes>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,6 +28,7 @@
     <Compile Include="..\SqlSchema.Library\Models\Index.cs" Link="Models\Index.cs" />
     <Compile Include="..\SqlSchema.Library\Models\Procedure.cs" Link="Models\Procedure.cs" />
     <Compile Include="..\SqlSchema.Library\Models\ScalarFunction.cs" Link="Models\ScalarFunction.cs" />
+    <Compile Include="..\SqlSchema.Library\Models\Synonym.cs" Link="Models\Synonym.cs" />
     <Compile Include="..\SqlSchema.Library\Models\Table.cs" Link="Models\Table.cs" />
     <Compile Include="..\SqlSchema.Library\Models\TableFunction.cs" Link="Models\TableFunction.cs" />
     <Compile Include="..\SqlSchema.Library\Models\View.cs" Link="Models\View.cs" />

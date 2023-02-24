@@ -11,17 +11,24 @@ namespace SqlSchema.SqlServer
     {
         private async Task AddProceduresAsync(IDbConnection connection, List<DbObject> results)
         {
+            var procs = await GetProcsInnerAsync(connection);
+
+            results.AddRange(procs);
+        }
+
+        public static async Task<IEnumerable<DbObject>> GetProcsInnerAsync(IDbConnection connection, string sysObjectPrefix = null)
+        {
             var procs = await connection.QueryAsync<Procedure>(
-                @"SELECT
+                $@"SELECT
                     SCHEMA_NAME([p].[schema_id]) AS [Schema],
                     [p].[name] AS [Name],
                     [p].[object_id] AS [Id],
                     [m].[definition] AS [SqlDefinition]
                 FROM 
-                    [sys].[procedures] [p]
-                    INNER JOIN [sys].[sql_modules] [m] ON [p].[object_id]=[m].[object_id]");
+                    {sysObjectPrefix}[sys].[procedures] [p]
+                    INNER JOIN {sysObjectPrefix}[sys].[sql_modules] [m] ON [p].[object_id]=[m].[object_id]");
 
-            var args = await GetArgumentsAsync(connection);
+            var args = await GetArgumentsAsync(connection, sysObjectPrefix);
 
             var argLookup = args.ToLookup(row => row.ObjectId);
 
@@ -30,7 +37,7 @@ namespace SqlSchema.SqlServer
                 proc.Arguments = argLookup[proc.Id];
             }
 
-            results.AddRange(procs);
+            return procs;
         }
     }
 }
