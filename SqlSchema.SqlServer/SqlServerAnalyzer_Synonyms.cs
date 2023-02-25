@@ -21,7 +21,9 @@ namespace SqlSchema.SqlServer
 	                [p].[value] AS [Name]
                 FROM
 	                [sys].[synonyms] [syn]
-	                CROSS APPLY STRING_SPLIT([syn].[base_object_name], '.') AS [p]"))
+	                CROSS APPLY STRING_SPLIT([syn].[base_object_name], '.') AS [p]
+                WHERE
+                    OBJECT_ID([syn].[base_object_name]) IS NOT NULL"))
                     .GroupBy(row => row.ObjectId)
                     .Select(grp => grp.Select((item, index) => new ObjectNamePart()
                     {
