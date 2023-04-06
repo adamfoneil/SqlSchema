@@ -46,13 +46,13 @@ namespace SqlSchema.SqlServer
                 ) SELECT
 	                [col].[object_id] AS [ObjectId],
 	                [col].[name] AS [Name],
-	                TYPE_NAME([col].[system_type_id]) AS [DataType],
+	                TYPE_NAME([col].[user_type_id]) AS [DataType],
 	                [col].[is_nullable] AS [IsNullable],
 	                [def].[definition]  AS [DefaultValue],
 	                [col].[collation_name] AS [Collation],
 	                CASE
-		                WHEN TYPE_NAME([col].[system_type_id]) LIKE 'nvar%' AND [col].[max_length]>0 THEN ([col].[max_length]/2)
-		                WHEN TYPE_NAME([col].[system_type_id]) LIKE 'nvar%' AND [col].[max_length]=0 THEN -1
+		                WHEN TYPE_NAME([col].[user_type_id]) LIKE 'nvar%' AND [col].[max_length]>0 THEN ([col].[max_length]/2)
+		                WHEN TYPE_NAME([col].[user_type_id]) LIKE 'nvar%' AND [col].[max_length]=0 THEN -1
 		                ELSE [col].[max_length]
 	                END AS [MaxLength],
 	                [col].[precision] AS [Precision],
@@ -68,7 +68,7 @@ namespace SqlSchema.SqlServer
 	                INNER JOIN [sys].[tables] [t] ON [col].[object_id]=[t].[object_id]
 	                LEFT JOIN [sys].[default_constraints] [def] ON [col].[default_object_id]=[def].[object_id]
 	                LEFT JOIN [sys].[computed_columns] [calc] ON [col].[object_id]=[calc].[object_id] AND [col].[column_id]=[calc].[column_id]
-	                LEFT JOIN [pkColumns] [pk] ON [col].[object_id]=[pk].[object_id] AND [col].[column_id]=[pk].[column_id]
+	                LEFT JOIN [pkColumns] [pk] ON [col].[object_id]=[pk].[object_id] AND [col].[column_id]=[pk].[column_id]						 
                 WHERE
 	                [t].[type_desc]='USER_TABLE'");
 
