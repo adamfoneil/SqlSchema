@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using SqlSchema.Library.Models;
+using SqlSchema.SqlServer.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -59,6 +60,8 @@ namespace SqlSchema.SqlServer
 
             foreach (var db in synonyms.GroupBy(row => row.RawDbName))
             {
+                if (!await connection.DatabaseExistsAsync(db.Key)) continue;
+
                 foreach (var r in reflectors)
                 {
                     var referencedObjects = await r.ObjectGetter.Invoke($"{db.Key}.", connection);

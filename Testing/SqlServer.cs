@@ -4,6 +4,7 @@ using SqlSchema.SqlServer;
 using SqlServer.LocalDb;
 using System.Linq;
 using System.Threading.Tasks;
+using SqlSchema.SqlServer.Extensions;
 
 namespace Testing
 {
@@ -101,6 +102,16 @@ namespace Testing
                 var synonyms = (await a.GetDbObjectsAsync(cn)).OfType<Synonym>();                
                 Assert.IsTrue(synonyms.Count() == 3);
             }
+        }
+
+        [TestMethod]
+        public async Task DbExists()
+        {
+            using var cn = LocalDb.GetConnection("ZingerSample");
+            var exists = await cn.DatabaseExistsAsync("hello");
+            Assert.IsFalse(exists);
+            exists = await cn.DatabaseExistsAsync("ZingerSample");
+            Assert.IsTrue(exists);
         }
     }
 }
