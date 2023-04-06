@@ -60,7 +60,8 @@ namespace SqlSchema.SqlServer
 
             foreach (var db in synonyms.GroupBy(row => row.RawDbName))
             {
-                if (!await connection.DatabaseExistsAsync(db.Key)) continue;
+                var dbName = Unbracket(db.Key);
+                if (!await connection.DatabaseExistsAsync(dbName)) continue;
 
                 foreach (var r in reflectors)
                 {
@@ -80,9 +81,9 @@ namespace SqlSchema.SqlServer
                             Id = syn.ObjectId,
                             ReferencedObject = obj,
                         };
-                    });
+                    });         
 
-                    results.AddRange(output);
+                    results.AddRange(output.Where(syn => !results.Any(result => result.Id == syn.Id)));
                 }
             }
         }
