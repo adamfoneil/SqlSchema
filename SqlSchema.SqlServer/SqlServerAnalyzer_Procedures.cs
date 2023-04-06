@@ -3,6 +3,7 @@ using SqlSchema.Library.Models;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 
 namespace SqlSchema.SqlServer
@@ -18,8 +19,8 @@ namespace SqlSchema.SqlServer
 
         public static async Task<IEnumerable<DbObject>> GetProcsInnerAsync(IDbConnection connection, string sysObjectPrefix = null)
         {
-            var procs = await connection.QueryAsync<Procedure>(
-                $@"SELECT
+            var procs = await TryQueryAsync<Procedure>(connection,
+               $@"SELECT
                     SCHEMA_NAME([p].[schema_id]) AS [Schema],
                     [p].[name] AS [Name],
                     [p].[object_id] AS [Id],
@@ -27,6 +28,8 @@ namespace SqlSchema.SqlServer
                 FROM 
                     {sysObjectPrefix}[sys].[procedures] [p]
                     INNER JOIN {sysObjectPrefix}[sys].[sql_modules] [m] ON [p].[object_id]=[m].[object_id]");
+            
+            if (!procs.Any()) return Enumerable.Empty<DbObject>();
 
             var args = await GetArgumentsAsync(connection, sysObjectPrefix);
 
@@ -38,6 +41,18 @@ namespace SqlSchema.SqlServer
             }
 
             return procs;
+        }
+
+        private static async Task<IEnumerable<T>> TryQueryAsync<T>(IDbConnection connection, string sql)
+        {
+            try
+            {
+               return await connection.QueryAsync<T>(sql);
+            }
+            catch
+            {
+               return Enumerable.Empty<T>();
+            }
         }
     }
 }

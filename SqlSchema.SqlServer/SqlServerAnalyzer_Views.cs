@@ -8,28 +8,30 @@ using System.Threading.Tasks;
 
 namespace SqlSchema.SqlServer
 {
-    public partial class SqlServerAnalyzer : Analyzer
-    {
-        private async Task AddViewsAsync(IDbConnection connection, List<DbObject> results)
-        {
-			var views = await GetViewsInnerAsync(connection);
-			results.AddRange(views);
-		}
+   public partial class SqlServerAnalyzer : Analyzer
+   {
+      private async Task AddViewsAsync(IDbConnection connection, List<DbObject> results)
+      {
+         var views = await GetViewsInnerAsync(connection);
+         results.AddRange(views);
+      }
 
-		public static async Task<IEnumerable<View>> GetViewsInnerAsync(IDbConnection connection, string sysObjectPrefix = null)
-		{
-            var views = await connection.QueryAsync<View>(
-                $@"SELECT 
-                    [v].[name] AS [Name],
-	                SCHEMA_NAME([v].[schema_id]) AS [Schema],
-	                [v].[object_id] AS [Id],
-                    [m].[definition] AS [SqlDefinition]
-                FROM 
-                    {sysObjectPrefix}[sys].[views] [v]
-                    INNER JOIN {sysObjectPrefix}[sys].[sql_modules] [m] ON [v].[object_id]=[m].[object_id]");
+      public static async Task<IEnumerable<View>> GetViewsInnerAsync(IDbConnection connection, string sysObjectPrefix = null)
+      {
+         var views = await TryQueryAsync<View>(connection,
+            $@"SELECT 
+               [v].[name] AS [Name],
+	            SCHEMA_NAME([v].[schema_id]) AS [Schema],
+	            [v].[object_id] AS [Id],
+               [m].[definition] AS [SqlDefinition]
+            FROM 
+               {sysObjectPrefix}[sys].[views] [v]
+               INNER JOIN {sysObjectPrefix}[sys].[sql_modules] [m] ON [v].[object_id]=[m].[object_id]");
 
-            var columns = await connection.QueryAsync<Column>(
-                $@"SELECT
+         if (!views.Any()) return Enumerable.Empty<View>();
+
+         var columns = await connection.QueryAsync<Column>(
+             $@"SELECT
 	                [col].[object_id] AS [ObjectId],
 	                [col].[name] AS [Name],
 	                TYPE_NAME([col].[system_type_id]) AS [DataType],
@@ -52,11 +54,11 @@ namespace SqlSchema.SqlServer
 						[col].[object_id]=[calc].[object_id] AND 
 						[col].[column_id]=[calc].[column_id]");
 
-            var columnLookup = columns.ToLookup(row => row.ObjectId);
+         var columnLookup = columns.ToLookup(row => row.ObjectId);
 
-            foreach (var v in views) v.Columns = columnLookup[v.Id].ToArray();
+         foreach (var v in views) v.Columns = columnLookup[v.Id].ToArray();
 
-			return views;
-        }
-    }
+         return views;
+      }
+   }
 }
