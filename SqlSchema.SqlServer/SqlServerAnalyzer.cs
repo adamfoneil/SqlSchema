@@ -3,6 +3,7 @@ using SqlSchema.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SqlSchema.SqlServer
@@ -38,9 +39,35 @@ namespace SqlSchema.SqlServer
                 await AddProceduresAsync(connection, results);
                 await AddSynonymsAsync(connection, results);
             }
+
+            SetJoinCardinality(results);
             
             return results;
         }
+
+        private void SetJoinCardinality(List<DbObject> results)
+        {
+            var foreignKeys = results.OfType<ForeignKey>();
+            var tablesByName = results.OfType<Table>().ToDictionary(item => item.Name);
+
+            foreach (var fk in foreignKeys)
+            {
+                var referencingTable = tablesByName[fk.ReferencingTable.Name];
+                fk.Cardinality = (MatchesUniqueConstraint(referencingTable, fk.Columns)) ? JoinCardinality.OneToOne : JoinCardinality.OneToMany;
+            }
+
+            bool MatchesUniqueConstraint(Table table, ForeignKeyColumn[] columns) =>
+                table.Indexes.Where(IsUnique).Any(ndx => HaveSameColumns(ndx, columns));
+
+            bool HaveSameColumns(Index ndx, ForeignKeyColumn[] columns)
+            {
+                var indexColumns = ndx.Columns.Select(col => col.Name.ToLower()).OrderBy(col => col).ToArray();
+                var referencedColumns = columns.Select(col => col.ReferencingName.ToLower()).OrderBy(col => col).ToArray();
+                return indexColumns.SequenceEqual(referencedColumns);
+            }
+        }        
+
+        private bool IsUnique(Index arg) => arg.IsUnique;        
 
         private Task AddScalarFunctions(IDbConnection connection, List<DbObject> results)
         {
