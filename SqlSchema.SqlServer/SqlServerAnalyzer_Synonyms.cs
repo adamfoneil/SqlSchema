@@ -11,6 +11,9 @@ namespace SqlSchema.SqlServer
 {
     public partial class SqlServerAnalyzer
     {
+        /// <summary>
+        /// STRING_SPLIT implementation here requires SQL Server 2016 or later
+        /// </summary>
         private async Task AddSynonymsAsync(IDbConnection connection, List<DbObject> results)
         {
             // splits the name parts of referenced objects,

@@ -12,23 +12,23 @@ namespace Testing
     public class SqlServer
     {
         [TestMethod]
-        public void Analyze()
+        public async Task Analyze()
         {
-            using (var cn = LocalDb.GetConnection("CycleLog2"))
+            using (var cn = LocalDb.GetConnection("Ginseng8"))
             {
                 var a = new SqlServerAnalyzer();
-                var objects = a.GetDbObjectsAsync(cn).Result;
+                var objects = await a.GetDbObjectsAsync(cn);
                 Assert.IsTrue(objects.Any());
             }          
         }
 
         [TestMethod]
-        public void GetForeignKeys()
+        public async Task GetForeignKeys()
         {
             using (var cn = LocalDb.GetConnection("CycleLog2"))
             {
                 var a = new SqlServerAnalyzer();
-                var objects = a.GetDbObjectsAsync(cn).Result;
+                var objects = await a.GetDbObjectsAsync(cn);
 
                 var rideTable = objects.ToDictionary(row => $"{row.Schema}.{row.Name}")["dbo.Ride"] as Table;
                 
@@ -57,34 +57,34 @@ namespace Testing
         }
 
         [TestMethod]
-        public void GetViews()
+        public async Task GetViews()
         {
             using (var cn = LocalDb.GetConnection("Ginseng8"))
             {
                 var a = new SqlServerAnalyzer();
-                var views = a.GetDbObjectsAsync(cn).Result.OfType<View>();
+                var views = (await a.GetDbObjectsAsync(cn)).OfType<View>();
                 Assert.IsTrue(views.Any());
             }
         }
 
         [TestMethod]
-        public void GetTableFunctions()
+        public async Task GetTableFunctions()
         {
             using (var cn = LocalDb.GetConnection("Ginseng8"))
             {
                 var a = new SqlServerAnalyzer();
-                var functions = a.GetDbObjectsAsync(cn).Result.OfType<TableFunction>();
+                var functions = (await a.GetDbObjectsAsync(cn)).OfType<TableFunction>();
                 Assert.IsTrue(functions.Any());
             }
         }
 
         [TestMethod]
-        public void GetProcedures()
+        public async Task GetProcedures()
         {
             using (var cn = LocalDb.GetConnection("Ginseng8"))
             {
                 var a = new SqlServerAnalyzer();
-                var procs = a.GetDbObjectsAsync(cn).Result.OfType<Procedure>();
+                var procs = (await a.GetDbObjectsAsync(cn)).OfType<Procedure>();
                 Assert.IsTrue(procs.Any());
 
                 var dictionary = procs.ToDictionary(item => item.Name);
