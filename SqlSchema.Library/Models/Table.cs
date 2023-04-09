@@ -3,11 +3,20 @@ using System.Linq;
 
 namespace SqlSchema.Library.Models
 {
+    public enum ChangeTrackingOptions
+    {
+        None,
+        Table,
+        WithColumns
+    }
+
     public class Table : DbObject
     {
         public string IdentityColumn { get; set; }
         public string ClusteredIndex { get; set; }
         public long RowCount { get; set; }
+        public ChangeTrackingOptions ChangeTracking { get; set; } 
+        public bool HasChangeTracking => ChangeTracking != ChangeTrackingOptions.None;
 
         public override bool IsSelectable => true;
 
@@ -28,18 +37,15 @@ namespace SqlSchema.Library.Models
             }
         }
 
-        public IEnumerable<ForeignKey> GetParentForeignKeys(IEnumerable<DbObject> allObjects)
-        {
-            return allObjects
+        public IEnumerable<ForeignKey> GetParentForeignKeys(IEnumerable<DbObject> allObjects) =>
+            allObjects
                 .OfType<ForeignKey>()
                 .Where(fk => fk.ReferencingTable.Equals(this));
-        }
 
-        public IEnumerable<ForeignKey> GetChildForeignKeys(IEnumerable<DbObject> allObjects)
-        {
-            return allObjects
+
+        public IEnumerable<ForeignKey> GetChildForeignKeys(IEnumerable<DbObject> allObjects) =>
+            allObjects
                 .OfType<ForeignKey>()
-                .Where(fk => fk.ReferencedTable.Equals(this));                
-        }
+                .Where(fk => fk.ReferencedTable.Equals(this));
     }
 }

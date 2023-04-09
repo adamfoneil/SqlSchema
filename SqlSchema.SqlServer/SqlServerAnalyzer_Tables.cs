@@ -23,11 +23,17 @@ namespace SqlSchema.SqlServer
 					[t].[object_id] AS [Id],
 					[c].[name] AS [ClusteredIndex],
 					[i].[name] AS [IdentityColumn],
-					(SELECT SUM(row_count) FROM [sys].[dm_db_partition_stats] WHERE [object_id]=[t].[object_id] AND [index_id] IN (0, 1)) AS [RowCount]
+					(SELECT SUM(row_count) FROM [sys].[dm_db_partition_stats] WHERE [object_id]=[t].[object_id] AND [index_id] IN (0, 1)) AS [RowCount],
+					CASE
+						WHEN [ct].[is_track_columns_updated_on] = 1 THEN 2
+						WHEN [ct].[is_track_columns_updated_on] = 0 THEN 1
+						ELSE 0
+					END AS [ChangeTracking]
 				FROM
 					[sys].[tables] [t]
 					LEFT JOIN [clusteredIndexes] [c] ON [t].[object_id]=[c].[object_id]
-					LEFT JOIN [identityColumns] [i] ON [t].[object_id]=[i].[object_id]");
+					LEFT JOIN [identityColumns] [i] ON [t].[object_id]=[i].[object_id]
+					LEFT JOIN [sys].[change_tracking_tables] [ct] ON [t].[object_id]=[ct].[object_id]");
 
             var columns = await connection.QueryAsync<Column>(
                 @"WITH [pkColumns] AS (
