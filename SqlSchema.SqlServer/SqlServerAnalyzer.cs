@@ -48,11 +48,11 @@ namespace SqlSchema.SqlServer
         private void SetJoinCardinality(List<DbObject> results)
         {
             var foreignKeys = results.OfType<ForeignKey>();
-            var tablesByName = results.OfType<Table>().ToDictionary(item => item.Name);
+            var tablesByName = results.OfType<Table>().ToDictionary(item => TableUniqueName(item));
 
             foreach (var fk in foreignKeys)
             {
-                var referencingTable = tablesByName[fk.ReferencingTable.Name];
+                var referencingTable = tablesByName[TableUniqueName(fk.ReferencingTable)];
                 fk.Cardinality = (MatchesUniqueConstraint(referencingTable, fk.Columns)) ? JoinCardinality.OneToOne : JoinCardinality.OneToMany;
             }
 
@@ -65,6 +65,8 @@ namespace SqlSchema.SqlServer
                 var referencedColumns = columns.Select(col => col.ReferencingName.ToLower()).OrderBy(col => col).ToArray();
                 return indexColumns.SequenceEqual(referencedColumns);
             }
+
+            string TableUniqueName(Table table) => $"{table.Schema}.{table.Name}";
         }        
 
         private bool IsUnique(Index arg) => arg.IsUnique;        

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Testing
 {
+    /// <summary>
+    /// this was for testing against closed-source/client databases that I didn't want to include the connection strings in source.
+    /// </summary>
    [TestClass]
    public class SqlServer2
    {
