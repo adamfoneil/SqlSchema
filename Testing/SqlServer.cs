@@ -19,6 +19,10 @@ namespace Testing
                 var a = new SqlServerAnalyzer();
                 var objects = await a.GetDbObjectsAsync(cn);
                 Assert.IsTrue(objects.Any());
+
+                var oneToOne = objects.OfType<ForeignKey>().Where(fk => fk.Cardinality == JoinCardinality.OneToOne);
+                Assert.IsTrue(oneToOne.Select(fk => fk.ReferencingTable.Name).SequenceEqual(new[] { "LabelInstructions", "WorkItemDevelopment", "WorkItemPriority" }));
+                var oneToMany = objects.OfType<ForeignKey>().Where(fk => fk.Cardinality == JoinCardinality.OneToMany);
             }          
         }
 
